@@ -23,6 +23,16 @@ jobs:
           remote_user: ${{ secrets.USER }}
           remote_key: ${{ secrets.KEY }}
 
+      - name: copy certbot docker compose file
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: docker-compose-le.yaml
+          remote_path: /home/${{ secrets.USER }}/docker-compose-le.yaml
+          remote_host: ${{ secrets.HOST }}
+          remote_user: ${{ secrets.USER }}
+          remote_key: ${{ secrets.KEY }}
+
       - name: install docker & docker compose
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -40,3 +50,25 @@ jobs:
           remote_host: ${{ secrets.HOST }}
           remote_user: ${{ secrets.USER }}
           remote_key: ${{ secrets.KEY }}
+
+      - name: install and build payload
+        working-directory: payload-app
+        run: npm i && npm run build
+
+      - name: deploy payload folder with rsync
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: payload-app
+          remote_path: /home/${{ secrets.USER }}}/
+          remote_host: ${{ secrets.HOST }}
+          remote_user: ${{ secrets.USER }}
+          remote_key: ${{ secrets.KEY }}
+
+      - name: install docker & docker compose
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          script: docker compose up -d
