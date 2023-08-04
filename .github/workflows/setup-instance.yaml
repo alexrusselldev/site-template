@@ -79,12 +79,12 @@ jobs:
           remote_key: ${{ secrets.KEY }}
 
       - name: generate initial nginx conf
-          uses: appleboy/ssh-action@v0.1.7
-          with:
-            host: ${{ secrets.HOST }}
-            username: ${{ secrets.USER }}
-            key: ${{ secrets.KEY }}
-            script: ./scripts/nginx-setup-config.sh ${{ vars.DOMAIN }} ${{ vars.EMAIL }}
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          script: ./scripts/nginx-setup-config.sh ${{ vars.DOMAIN }} ${{ vars.EMAIL }}
 
       - name: launch docker containers
         uses: appleboy/ssh-action@v0.1.7
@@ -109,7 +109,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.KEY }}
           script: docker compose down
-  
+
       - name: generate production nginx config
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -125,4 +125,3 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.KEY }}
           script: docker compose up -d
-
