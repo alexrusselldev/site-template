@@ -78,51 +78,51 @@ jobs:
           remote_user: ${{ secrets.USER }}
           remote_key: ${{ secrets.KEY }}
 
-    - name: generate initial nginx conf
+      - name: generate initial nginx conf
+          uses: appleboy/ssh-action@v0.1.7
+          with:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.USER }}
+            key: ${{ secrets.KEY }}
+            script: ./scripts/nginx-setup-config.sh ${{ vars.DOMAIN }} ${{ vars.EMAIL }}
+
+      - name: launch docker containers
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.KEY }}
-          script: ./scripts/nginx-setup-config.sh ${{ vars.DOMAIN }} ${{ vars.EMAIL }}
+          script: docker compose up -d
 
-    - name: launch docker containers
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.KEY }}
-        script: docker compose up -d
+      - name: generate certs
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          script: ./run-letsencrypt.sh admin.${{ vars.DOMAIN }} ${{ vars.EMAIL }}
 
-    - name: generate certs
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.KEY }}
-        script: ./run-letsencrypt.sh admin.${{ vars.DOMAIN }} ${{ vars.EMAIL }}
+      - name: bring containers down
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          script: docker compose down
+  
+      - name: generate production nginx config
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          script: rm nginx.conf && ./nginx-main-config.sh ${{ vars.DOMAIN }}
 
-    - name: bring containers down
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.KEY }}
-        script: docker compose down
- 
-    - name: generate production nginx config
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.KEY }}
-        script: rm nginx.conf && ./nginx-main-config.sh ${{ vars.DOMAIN }}
-
-    - name: launch docker containers
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.KEY }}
-        script: docker compose up -d
+      - name: launch docker containers
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          script: docker compose up -d
 
