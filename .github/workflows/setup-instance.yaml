@@ -116,7 +116,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.KEY }}
-          script: rm nginx.conf && ./nginx-main-config.sh ${{ vars.DOMAIN }}
+          script: rm nginx.conf && ./scripts/nginx-main-config.sh ${{ vars.DOMAIN }}
 
       - name: launch docker containers
         uses: appleboy/ssh-action@v0.1.7
