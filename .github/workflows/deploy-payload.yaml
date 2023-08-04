@@ -19,7 +19,7 @@ jobs:
 
       - name: install and build payload
         working-directory: payload-app
-        run: npm i && npm run build
+        run: npm i && DOMAIN=${{ vars.DOMAIN }} npm run build
 
       - name: bring containers down
         uses: appleboy/ssh-action@v0.1.7
@@ -29,7 +29,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: docker compose down
 
-      - name: deploy next folder with rsync
+      - name: deploy payload folder with rsync
         uses: burnett01/rsync-deployments@5.1
         with:
           switches: -avzr --delete
