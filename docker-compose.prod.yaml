@@ -41,7 +41,6 @@ services:
       - mongo
     environment:
       MONGODB_URI: mongodb://mongo:27017/payload
-      PORT: 3001
       PAYLOAD_SECRET: TESTING
     networks:
       - main
