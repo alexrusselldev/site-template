@@ -19,7 +19,7 @@ jobs:
 
       - name: install and build payload
         working-directory: payload-app
-        run: npm i && DOMAIN=${{ vars.DOMAIN }} npm run build
+        run: npm i && npm run build
 
       - name: bring containers down
         uses: appleboy/ssh-action@v0.1.7
