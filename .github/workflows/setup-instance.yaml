@@ -1,0 +1,42 @@
+# .github/workflows/publish.yml
+name: setup instance
+
+on:
+  workflow_dispatch:
+
+jobs:
+  install-docker:
+    runs-on: ubuntu-latest
+    name: install docker and add compose
+
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v2
+
+      - name: copy docker installation script
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: scripts
+          remote_path: /home/${{ secrets.USER }}/
+          remote_host: ${{ secrets.HOST }}
+          remote_user: ${{ secrets.USER }}
+          remote_key: ${{ secrets.KEY }}
+
+      - name: install docker & docker compose
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          script: chmod 755 ./scripts/* && ./scripts/install-docker-remote.sh
+
+      - name: deploy production compose
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: ./docker-compose.prod.yaml
+          remote_path: /home/${{ secrets.USER }}/docker-compose.yaml
+          remote_host: ${{ secrets.HOST }}
+          remote_user: ${{ secrets.USER }}
+          remote_key: ${{ secrets.KEY }}
