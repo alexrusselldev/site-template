@@ -6,7 +6,7 @@ on:
 jobs:
   install-docker:
     runs-on: ubuntu-latest
-    name: install docker and add compose
+    name: setup server
 
     steps:
       - name: git checkout
@@ -52,7 +52,7 @@ jobs:
 
       - name: install and build payload
         working-directory: payload-app
-        run: npm i && DOMAIN=${{ vars.DOMAIN }} npm run build
+        run: npm i && npm run build
 
       - name: deploy payload folder with rsync
         uses: burnett01/rsync-deployments@5.1
