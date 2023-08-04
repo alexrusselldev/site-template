@@ -16,7 +16,7 @@ services:
     depends_on:
       - payload
 
- next:
+  next:
     image: node:18
     ports:
       - "3000:3000"
