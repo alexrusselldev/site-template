@@ -132,4 +132,4 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.KEY }}
-          script: ./scripts/add-cron/sh ${{ vars.DOMAIN }} ${{ vars.EMAIL }}
+          script: ./scripts/add-cron.sh ${{ vars.DOMAIN }} ${{ vars.EMAIL }}
