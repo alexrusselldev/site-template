@@ -16,6 +16,19 @@ services:
     depends_on:
       - payload
 
+ next:
+    image: node:18
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./next-app:/home/node/app
+    working_dir: /home/node/app/
+    command: sh -c "npm run start"
+    depends_on:
+      - payload
+    networks:
+      - main
+
   payload:
     image: node:18
     ports:

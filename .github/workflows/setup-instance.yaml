@@ -65,6 +65,20 @@ jobs:
           remote_user: ${{ secrets.USER }}
           remote_key: ${{ secrets.KEY }}
 
+      - name: install and build next
+        working-directory: next-app
+        run: npm i && npm run build
+
+      - name: deploy next folder with rsync
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: next-app
+          remote_path: /home/${{ secrets.USER }}/
+          remote_host: ${{ secrets.HOST }}
+          remote_user: ${{ secrets.USER }}
+          remote_key: ${{ secrets.KEY }}
+
       - name: install docker & docker compose
         uses: appleboy/ssh-action@v0.1.7
         with:
