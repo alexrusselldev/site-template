@@ -125,3 +125,11 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.KEY }}
           script: docker compose up -d
+
+      - name: add crontab
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          script: ./scripts/add-cron/sh ${{ vars.DOMAIN }} ${{ vars.EMAIL }}
