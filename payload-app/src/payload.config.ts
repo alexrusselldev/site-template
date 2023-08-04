@@ -4,7 +4,7 @@ import path from "path";
 import Users from "./collections/Users";
 
 export default buildConfig({
-  serverURL: `http://admin.${process.env.DOMAIN}`,
+  serverURL: `https://admin.${process.env.DOMAIN}`,
   admin: {
     user: Users.slug,
   },
