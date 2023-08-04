@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - next/**
+      - next-app/**
 
 jobs:
   deploy-next:
