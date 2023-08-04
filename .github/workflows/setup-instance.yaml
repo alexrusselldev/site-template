@@ -52,7 +52,7 @@ jobs:
 
       - name: install and build payload
         working-directory: payload-app
-        run: npm i && npm run build
+        run: npm i && DOMAIN=${{ vars.DOMAIN }} npm run build
 
       - name: deploy payload folder with rsync
         uses: burnett01/rsync-deployments@5.1
